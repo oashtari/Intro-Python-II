@@ -1,25 +1,30 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons",
+                     [Item('empty room', 'to test item')]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", [Item('sword', 'very long'), Item('flashlight', 'quite bright')]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""",[Item('sack', 'to hold stuff'), 
+Item('crystal ball', 'thy fortune')]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""", [Item('cup', 'for thirst'), 
+Item('phone', 'to call your mom')]),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""",[Item('book', 'for boredom'), 
+Item('baby', 'feed it')]),
 }
 
 
@@ -72,3 +77,49 @@ while True:
 
 
 
+# * Add a new type of sentence the parser can understand: two words.
+
+#   * Until now, the parser could just understand one sentence form:
+
+#      `verb`
+
+#     such as "n" or "q".
+
+#   * But now we want to add the form:
+
+#     `verb` `object`
+
+#     such as "take coins" or "drop sword".
+
+#   * Split the entered command and see if it has 1 or 2 words in it to determine
+#     if it's the first or second form.
+
+
+
+
+# * Implement support for the verb `get` followed by an `Item` name. This will be
+#   used to pick up `Item`s.
+
+#   * If the user enters `get` or `take` followed by an `Item` name, look at the
+#     contents of the current `Room` to see if the item is there.
+
+#      * If it is there, remove it from the `Room` contents, and add it to the
+#        `Player` contents.
+
+#      * If it's not there, print an error message telling the user so.
+
+#      * Add an `on_take` method to `Item`.
+
+#         * Call this method when the `Item` is picked up by the player.
+
+#         * `on_take` should print out "You have picked up [NAME]" when you pick up an item.
+
+#         * The `Item` can use this to run additional code when it is picked up.
+
+#      * Add an `on_drop` method to `Item`. Implement it similar to `on_take`.
+
+# * Implement support for the verb `drop` followed by an `Item` name. This is the
+#   opposite of `get`/`take`.
+
+# * Add the `i` and `inventory` commands that both show a list of items currently
+#   carried by the player.
