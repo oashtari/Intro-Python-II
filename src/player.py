@@ -1,10 +1,12 @@
 # Write a class to hold player information, e.g. what room they are in
 # currently.
-
+from typing import List
+from item import Item
 class Player:
-    def __init__(self, name, location):
+    def __init__(self, name, location, items: List[Item]=None):
         self.name = name
         self.location = location
+        self.items = items
 
     def try_path(self, path):
         attribute = path + '_to'
@@ -14,6 +16,9 @@ class Player:
 
         else:
             print("YOU SHALL NOT PASS\n")
+
+    def add_item(self, item):
+        self.items.append(item)
 
     # def __str__(self):
     #     place = f"{self.location}"
