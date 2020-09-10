@@ -8,7 +8,7 @@ class Room:
         self.items = items
 
     def __str__(self):
-        stuff = f"{self.name}, {self.description}, and all the available items:\n"
+        stuff = f"{self.name} \n these items are availble to pick up:\n"
         # stuff += f"{self.items}"
         for i,c in enumerate(self.items):
             stuff += str(i+1) + ":\t" + c.name + ":\t" + c.description + "\n"
@@ -17,3 +17,6 @@ class Room:
 
     def add_item(self, item):
         self.items.append(item)
+
+    def drop_item(self, item):
+        self.items.remove(item)

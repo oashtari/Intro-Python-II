@@ -7,10 +7,10 @@ from item import Item
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons",
-                     [Item('empty room', 'to test item')]),
+                     [Item('flashlight', 'to test item')]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east.""", [Item('sword', 'very long'), Item('flashlight', 'quite bright')]),
+passages run north and east.""", [Item('sword', 'very long'), Item('fire', 'quite bright')]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -46,7 +46,7 @@ room['treasure'].s_to = room['narrow']
 # Make a new player object that is currently in the 'outside' room.
 
 
-newPlayer = Player(input("Hi, what is is your name?"), room["outside"])
+newPlayer = Player(input("Hi, what is is your name?\n"), room["outside"], ["bag"])
 # currentRoom = newPlayer.location
 
 print(f" Hi {newPlayer.name}, \n ")
@@ -65,16 +65,40 @@ options = ['n', 's', 'e', 'w']
 # If the user enters "q", quit the game.
 
 while True:
-    print(f"You are currently in: \n \n  {newPlayer.location} \n")
+    print(f"You are currently in: \n  {newPlayer.location} \n")
+    currentRoom = f"{newPlayer.location}"
+    # print(f"CURRENT ROOM {currentRoom}")
 
-    path = input("Which direction would you like to go?\n").strip().lower().split()[0]
+    path, grab = input("Which direction would you like to go?\n Would you like to pick up any items?").split()
+    path = path.strip().lower().split()[0]
     path = path[0]
+    # print("path is: ", path)
+    # print("item is: ", grab)
+    whatis = type(newPlayer.location)
+    print(f"TYPE: {whatis}")
+
+    for i,c in enumerate(newPlayer.location.items):
+        if grab in c.name:
+            newPlayer.add_item(grab)
+            print(f"PLAYER ITEMS: {newPlayer.items}")
+            print(f"LOCATION: {newPlayer.location}")
+            # newPlayer.location.drop_item(grab)
+            print(f"ROOM ITEMS POST DROP: {c.name}: {c.description}")
+        else:
+            print(f"There is no {grab.upper()} in this room")
+
+    
 
     if path == 'q':
         break
     
     if path in options:
         newPlayer.try_path(path)
+    
+    # if grab in newPlayer.location.items:
+    #     print("TEST MOFO")
+    # else: 
+    #     "that item is not available"
 
 
 
