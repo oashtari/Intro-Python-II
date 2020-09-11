@@ -2,11 +2,15 @@
 # currently.
 from typing import List
 from item import Item
+
 class Player:
-    def __init__(self, location, items):
+    def __init__(self, location, items=None):
         # self.name = name
         self.location = location
-        self.items = items
+        if items == None:
+            self.items = []
+        else:
+            self.items = items
 
     def try_path(self, path):
         attribute = path + '_to'
@@ -19,7 +23,16 @@ class Player:
 
     def add_item(self, item):
         self.items.append(item)
+        item.on_take()
 
-# * Add capability to add `Item`s to the player's inventory. The inventory can
-#   also be a `list` of items "in" the player, similar to how `Item`s can be in a
-#   `Room`.
+    def remove_item(self, item_name):
+        for i,item in enumerate(self.items):
+            if item_name == item.name:
+                item.on_drop()
+                return self.items.pop(i)
+
+    def get_inventory(self):
+        print(f"Here's everything in my bag:\n")
+        for i in self.items:
+            print(f"{i.name}: {i.description}")
+            

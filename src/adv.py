@@ -15,7 +15,7 @@ passages run north and east.""", [Item('sword', 'very long'), Item('fire', 'quit
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
 the distance, but there is no way across the chasm.""",[Item('sack', 'to hold stuff'), 
-Item('crystal ball', 'thy fortune')]),
+Item('crystal', 'thy fortune')]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air.""", [Item('cup', 'for thirst'), 
@@ -46,10 +46,10 @@ room['treasure'].s_to = room['narrow']
 # Make a new player object that is currently in the 'outside' room.
 
 
-newPlayer = Player(room["outside"], ["bag"])
-# currentRoom = newPlayer.location
+player = Player(room["outside"])
+# currentRoom = player.location
 
-# print(f" Hi {newPlayer.name}, \n ")
+# print(f" Hi {player.name}, \n ")
 
 options = ['n', 's', 'e', 'w']
 
@@ -67,90 +67,37 @@ options = ['n', 's', 'e', 'w']
 
 
 while True:
-    print(f"You are currently in: \n  {newPlayer.location} \n")
-    currentRoom = f"{newPlayer.location}"
-    # print(f"CURRENT ROOM {currentRoom}")
+    print(f"You are currently in: \n  {player.location} \n")
+    currentRoom = f"{player.location}"
 
-    path, grab = input("Which direction would you like to go?\n Would you like to pick up any items?").split()
-    path = path.strip().lower().split()[0]
-    path = path[0]
-    # print("path is: ", path)
-    # print("item is: ", grab)
-    # whatis = type(newPlayer.location)
-    # print(f"TYPE: {whatis}")
+    action = input("Hi player, welcome to your adventure,\n you can either enter a new room by choosing to go [n]orth, [s]outh, [e]ast, or [w]est,\n OR you can choose to take [item_name] or drop [item_name] in a room,\n finally you can see your items by typing [i]nventory\n").split()
+    # print("INITIAL ACTION", len(action))
+    # print('ACTION', action)
+    if len(action) == 1:
+        path = action[0].strip().lower().split()[0]
+        print('PATH', path)
+        path = path[0]
 
-    for i,c in enumerate(newPlayer.location.items):
-        if grab in c.name:
-            take = newPlayer.location.get_item(grab)
-            print("what is take", take)
-            print("type of TAKE", type(take))
-            newPlayer.location.drop_item(take)
-            print(f"ROOM ITEMS POST DROP: {newPlayer.location.items}")
+        if path == 'q':
+            break
+        
+        if path in options:
+            player.try_path(path)
 
-            newPlayer.add_item(take)
-            print(f"PLAYER ITEMS: {newPlayer.items}")
-            # print(f"LOCATION ITEMS: {newPlayer.location.items}")
+        if path == 'i':
+            player.get_inventory()
+        
+    elif len(action) == 2:
+        if action[0] == 'take' or action[0] == 'get':
+            removed_item = player.location.remove_item(action[1])
+            player.add_item(removed_item)
+            on_take(removed_item)
+        elif action[0] == 'drop':
+            removed_item = player.remove_item(action[1])
+            player.location.add_item(removed_item)
+            print(f"DROPPED: {player.location.items}")
         else:
-            print(f"There is no {grab.upper()} in this room")
+            print(f"There is no {action[1].upper()} in this room")
 
-    
-
-    if path == 'q':
-        break
-    
-    if path in options:
-        newPlayer.try_path(path)
-    
-    # if grab in newPlayer.location.items:
-    #     print("TEST MOFO")
-    # else: 
-    #     "that item is not available"
-
-
-
-# * Add a new type of sentence the parser can understand: two words.
-
-#   * Until now, the parser could just understand one sentence form:
-
-#      `verb`
-
-#     such as "n" or "q".
-
-#   * But now we want to add the form:
-
-#     `verb` `object`
-
-#     such as "take coins" or "drop sword".
-
-#   * Split the entered command and see if it has 1 or 2 words in it to determine
-#     if it's the first or second form.
-
-
-
-
-# * Implement support for the verb `get` followed by an `Item` name. This will be
-#   used to pick up `Item`s.
-
-#   * If the user enters `get` or `take` followed by an `Item` name, look at the
-#     contents of the current `Room` to see if the item is there.
-
-#      * If it is there, remove it from the `Room` contents, and add it to the
-#        `Player` contents.
-
-#      * If it's not there, print an error message telling the user so.
-
-#      * Add an `on_take` method to `Item`.
-
-#         * Call this method when the `Item` is picked up by the player.
-
-#         * `on_take` should print out "You have picked up [NAME]" when you pick up an item.
-
-#         * The `Item` can use this to run additional code when it is picked up.
-
-#      * Add an `on_drop` method to `Item`. Implement it similar to `on_take`.
-
-# * Implement support for the verb `drop` followed by an `Item` name. This is the
-#   opposite of `get`/`take`.
-
-# * Add the `i` and `inventory` commands that both show a list of items currently
-#   carried by the player.
+    else:
+        print("I do not understand your preferred action, please try again.")

@@ -22,20 +22,7 @@ class Room:
         for item in self.items:
             return item.name
 
-    def drop_item(self, item):
-        for i in self.items:
-            if item == i.name:
-                # print("what is i", i.name)
-                self.items.remove(i)
-
-    #         if i == item.name:
-
-
-    # def take(self, item):
-    #         for i in self.current_room.items:
-    #             if i.name == item:
-    #                 self.items.append(i)
-    #                 self.current_room.items.remove(i)
-    #                 i.on_take()
-    #                 self.current_room.print_items(self.has_light())
-    #                 break
+    def remove_item(self, item_name):
+        for i,item in enumerate(self.items):
+            if item_name == item.name:
+                return self.items.pop(i)
