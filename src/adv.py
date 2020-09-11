@@ -46,10 +46,10 @@ room['treasure'].s_to = room['narrow']
 # Make a new player object that is currently in the 'outside' room.
 
 
-newPlayer = Player(input("Hi, what is is your name?\n"), room["outside"], ["bag"])
+newPlayer = Player(room["outside"], ["bag"])
 # currentRoom = newPlayer.location
 
-print(f" Hi {newPlayer.name}, \n ")
+# print(f" Hi {newPlayer.name}, \n ")
 
 options = ['n', 's', 'e', 'w']
 
@@ -64,6 +64,8 @@ options = ['n', 's', 'e', 'w']
 #
 # If the user enters "q", quit the game.
 
+
+
 while True:
     print(f"You are currently in: \n  {newPlayer.location} \n")
     currentRoom = f"{newPlayer.location}"
@@ -74,16 +76,20 @@ while True:
     path = path[0]
     # print("path is: ", path)
     # print("item is: ", grab)
-    whatis = type(newPlayer.location)
-    print(f"TYPE: {whatis}")
+    # whatis = type(newPlayer.location)
+    # print(f"TYPE: {whatis}")
 
     for i,c in enumerate(newPlayer.location.items):
         if grab in c.name:
-            newPlayer.add_item(grab)
+            take = newPlayer.location.get_item(grab)
+            print("what is take", take)
+            print("type of TAKE", type(take))
+            newPlayer.location.drop_item(take)
+            print(f"ROOM ITEMS POST DROP: {newPlayer.location.items}")
+
+            newPlayer.add_item(take)
             print(f"PLAYER ITEMS: {newPlayer.items}")
-            print(f"LOCATION: {newPlayer.location}")
-            # newPlayer.location.drop_item(grab)
-            print(f"ROOM ITEMS POST DROP: {c.name}: {c.description}")
+            # print(f"LOCATION ITEMS: {newPlayer.location.items}")
         else:
             print(f"There is no {grab.upper()} in this room")
 
